@@ -1,13 +1,15 @@
-### Flask API (Flask + SQLAlchemy + MySQL)
+# Flask API (Flask + SQLAlchemy + MySQL)
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-#import os
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
+load_dotenv()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:MonaDsouza_23@localhost/todo_db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@localhost/{os.getenv('DB_NAME')}"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@localhost/{os.getenv('DB_NAME')}"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -21,8 +23,8 @@ class Task(db.Model):
 
 with app.app_context():
     db.create_all()
-    
-    
+
+
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()
